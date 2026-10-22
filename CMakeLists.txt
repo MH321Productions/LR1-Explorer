@@ -7,9 +7,11 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
 
 qt_standard_project_setup()
 
+include_directories(include)
 
 qt_add_executable(LR1-Explorer
         src/main.cpp
+        src/ui/mainwindow.cpp
 )
 target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
 

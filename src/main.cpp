@@ -1,16 +1,13 @@
 #include <QApplication>
-#include <QMainWindow>
-#include <QStatusBar>
+
+#include <LR1-Explorer/ui/mainwindow.hpp>
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QApplication::setApplicationName(QStringLiteral("LR1-Explorer"));
 
-    QMainWindow window;
-    window.setWindowTitle(QStringLiteral("LR1-Explorer"));
-    window.resize(1280, 720);
-
-    window.statusBar()->showMessage(QStringLiteral("Open a folder to begin"));
+    LR1_Explorer::MainWindow window;
     window.show();
+
     return QApplication::exec();
 }
