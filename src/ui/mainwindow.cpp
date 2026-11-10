@@ -4,11 +4,33 @@
 #include <QStatusBar>
 #include <QMenuBar>
 #include <QFileDialog>
+#include <QTreeView>
+#include <QVBoxLayout>
+#include <QSplitter>
+#include <QStackedWidget>
 
 namespace LR1_Explorer {
     MainWindow::MainWindow() {
         setWindowTitle(QStringLiteral("LR1-Explorer"));
         resize(1280, 720);
+
+        auto* central = new QWidget;
+        auto* layout = new QVBoxLayout(central);
+
+        splitterMain = new QSplitter;
+
+        fileModel = new JamFileSystemModel();
+        fileModel->setReadOnly(true);
+        treeView = new QTreeView(splitterMain);
+        treeView->setModel(fileModel);
+
+        stackedViewer = new QStackedWidget(splitterMain);
+
+        splitterMain->addWidget(treeView);
+        splitterMain->addWidget(stackedViewer);
+
+        layout->addWidget(splitterMain);
+        setCentralWidget(central);
 
         menuFile = menuBar()->addMenu(QStringLiteral("File"));
 
@@ -30,6 +52,8 @@ namespace LR1_Explorer {
         const QString dirName = QFileDialog::getExistingDirectory(this, QStringLiteral("Select the data directory"));
         if (dirName.isEmpty()) return;
 
-
+        statusBar()->showMessage(dirName);
+        fileModel->setRootPath(dirName);
+        treeView->setRootIndex(fileModel->index(dirName));
     }
 }
