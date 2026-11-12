@@ -1,5 +1,7 @@
 #include <LR1-Explorer/ui/mainwindow.hpp>
 
+#include <iostream>
+
 #include <QApplication>
 #include <QStatusBar>
 #include <QMenuBar>
@@ -8,6 +10,8 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QStackedWidget>
+
+using namespace std::filesystem;
 
 namespace LR1_Explorer {
     MainWindow::MainWindow() {
@@ -20,9 +24,15 @@ namespace LR1_Explorer {
         splitterMain = new QSplitter;
 
         fileModel = new JamFileSystemModel();
-        fileModel->setReadOnly(true);
         treeView = new QTreeView(splitterMain);
         treeView->setModel(fileModel);
+        connect(treeView, &QTreeView::clicked, this, &MainWindow::onSelectFile);
+
+        if (QApplication::arguments().count() > 1) {
+            const path rootDir = QDir(QApplication::arguments().at(1)).filesystemAbsolutePath();
+            fileModel->setRootPath(rootDir);
+            treeView->setRootIndex(fileModel->index(rootDir));
+        }
 
         stackedViewer = new QStackedWidget(splitterMain);
 
@@ -53,7 +63,13 @@ namespace LR1_Explorer {
         if (dirName.isEmpty()) return;
 
         statusBar()->showMessage(dirName);
-        fileModel->setRootPath(dirName);
-        treeView->setRootIndex(fileModel->index(dirName));
+
+        const path rootDir = QDir(dirName).filesystemAbsolutePath();
+        fileModel->setRootPath(rootDir);
+        treeView->setRootIndex(fileModel->index(rootDir));
+    }
+
+    void MainWindow::onSelectFile(const QModelIndex& index) {
+        std::cout << index.column() << ", " << index.row() << std::endl;
     }
 }

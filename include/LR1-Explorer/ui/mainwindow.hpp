@@ -26,6 +26,7 @@ namespace LR1_Explorer {
             JamFileSystemModel* fileModel;
 
             void onOpen();
+            void onSelectFile(const QModelIndex& index);
     };
 }
 
