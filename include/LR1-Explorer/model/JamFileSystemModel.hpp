@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <map>
 #include <set>
+#include <vector>
 
 #include <QAbstractItemModel>
 
@@ -13,13 +14,22 @@ namespace LR1_Explorer {
     class JamFSEntry;
 
     class JamFileSystemModel: public QAbstractItemModel {
+        Q_OBJECT
+
         public:
+            Q_DISABLE_COPY_MOVE(JamFileSystemModel)
+
+            explicit JamFileSystemModel(QObject* parent = nullptr) : QAbstractItemModel(parent) {}
+            ~JamFileSystemModel() override = default;
+
+            [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &index) const override;
             [[nodiscard]] bool hasChildren(const QModelIndex &parent) const override;
             [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
             [[nodiscard]] QModelIndex index(int row, int column, const QModelIndex &parent) const override;
             [[nodiscard]] QModelIndex parent(const QModelIndex &child) const override;
             [[nodiscard]] int columnCount(const QModelIndex &parent) const override;
             [[nodiscard]] QVariant data(const QModelIndex &index, int role) const override;
+            [[nodiscard]] QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
             [[nodiscard]] QModelIndex index(const std::filesystem::path& p) const;
             QModelIndex setRootPath(const std::filesystem::path& path);
@@ -29,10 +39,12 @@ namespace LR1_Explorer {
 
             LR1::JamExtractor extractor;
             std::map<std::filesystem::path, JamFSEntry> entries;
-            std::map<QString, LR1::JamDirectory> loadedJams;
+            std::map<std::filesystem::path, LR1::JamDirectory> loadedJams;
+            std::map<std::filesystem::path, std::vector<std::filesystem::path>> indices;
 
             void loadDir(const std::filesystem::path& dir);
             void loadJamDir(const LR1::JamDirectory& jamDir, const std::filesystem::path& baseFile);
+            static int indexOf(const std::vector<std::filesystem::path>& list, const std::filesystem::path& p);
     };
 
     class JamFSEntry {
