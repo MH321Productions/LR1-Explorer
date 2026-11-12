@@ -21,7 +21,7 @@ include_directories(include)
 qt_add_executable(LR1-Explorer
         src/main.cpp
         src/ui/mainwindow.cpp
-        src/model/JamFileSystemModel.cpp
+        #src/model/JamFileSystemModel.cpp
 )
 target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets LR1)
 

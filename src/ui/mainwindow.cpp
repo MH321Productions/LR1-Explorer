@@ -23,9 +23,12 @@ namespace LR1_Explorer {
 
         splitterMain = new QSplitter;
 
-        fileModel = new JamFileSystemModel();
+        //fileModel = new JamFileSystemModel();
+        auto* model = new QFileSystemModel;
+        model->setRootPath("C:\\");
         treeView = new QTreeView(splitterMain);
-        treeView->setModel(fileModel);
+        //treeView->setModel(fileModel);
+        treeView->setModel(model);
         connect(treeView, &QTreeView::clicked, this, &MainWindow::onSelectFile);
 
         if (QApplication::arguments().count() > 1) {
@@ -65,8 +68,8 @@ namespace LR1_Explorer {
         statusBar()->showMessage(dirName);
 
         const path rootDir = QDir(dirName).filesystemAbsolutePath();
-        fileModel->setRootPath(rootDir);
-        treeView->setRootIndex(fileModel->index(rootDir));
+        /*fileModel->setRootPath(rootDir);
+        treeView->setRootIndex(fileModel->index(rootDir));*/
     }
 
     void MainWindow::onSelectFile(const QModelIndex& index) {
