@@ -10,11 +10,12 @@
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QStackedWidget>
+#include <QFileSystemModel>
 
 using namespace std::filesystem;
 
 namespace LR1_Explorer {
-    MainWindow::MainWindow() {
+    MainWindow::MainWindow(const path& rootDir): fileModel(nullptr) {
         setWindowTitle(QStringLiteral("LR1-Explorer"));
         resize(1280, 720);
 
@@ -30,12 +31,6 @@ namespace LR1_Explorer {
         //treeView->setModel(fileModel);
         treeView->setModel(model);
         connect(treeView, &QTreeView::clicked, this, &MainWindow::onSelectFile);
-
-        if (QApplication::arguments().count() > 1) {
-            const path rootDir = QDir(QApplication::arguments().at(1)).filesystemAbsolutePath();
-            fileModel->setRootPath(rootDir);
-            treeView->setRootIndex(fileModel->index(rootDir));
-        }
 
         stackedViewer = new QStackedWidget(splitterMain);
 

@@ -1,6 +1,8 @@
 #ifndef LR1_EXPLORER_MAINWINDOW_HPP
 #define LR1_EXPLORER_MAINWINDOW_HPP
 
+#include <filesystem>
+
 #include <QMainWindow>
 
 #include <LR1-Explorer/model/JamFileSystemModel.hpp>
@@ -12,7 +14,7 @@ class QStackedWidget;
 namespace LR1_Explorer {
     class MainWindow : public QMainWindow {
         public:
-            MainWindow();
+            explicit MainWindow(const std::filesystem::path& rootDir);
 
         private:
             QMenu* menuFile;
