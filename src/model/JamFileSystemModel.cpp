@@ -48,13 +48,10 @@ namespace LR1_Explorer {
     }
 
     QVariant JamFileSystemModel::data(const QModelIndex& index, const int role) const {
-        if (!index.isValid()) return {};
+        if (!index.isValid() || role != Qt::DisplayRole) return {};
 
         const auto* entry = static_cast<JamFSEntry*>(index.internalPointer());
-        if (role == Qt::DisplayRole) return entry->data(index.column());
-        if (role == Qt::DecorationRole) return entry->icon(index.column());
-
-        return {};
+        return entry->data(index.column());
     }
 
     Qt::ItemFlags JamFileSystemModel::flags(const QModelIndex &index) const {

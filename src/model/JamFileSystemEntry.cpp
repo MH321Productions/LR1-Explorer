@@ -1,6 +1,3 @@
-#include <QFileInfo>
-#include <qicon.h>
-
 #include <LR1-Explorer/model/JamFileSystemModel.hpp>
 
 using namespace std;
@@ -46,11 +43,6 @@ namespace LR1_Explorer {
 
             default: return {};
         }
-    }
-
-    QVariant JamFSEntry::icon(const int& column) const {
-        if (column == 0) return QIcon::fromTheme(QIcon::ThemeIcon::FolderOpen);
-        return {};
     }
 
     int JamFSEntry::row() const {

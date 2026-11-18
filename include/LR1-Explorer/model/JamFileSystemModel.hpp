@@ -24,7 +24,6 @@ namespace LR1_Explorer {
             [[nodiscard]] JamFSEntry* child(const int& row) const;
             [[nodiscard]] int childCount() const;
             [[nodiscard]] QVariant data(const int& column) const;
-            [[nodiscard]] QVariant icon(const int& column) const;
             [[nodiscard]] int row() const;
             [[nodiscard]] const JamFSEntry* parentItem() const;
             [[nodiscard]] std::filesystem::path getPath() const {return p;}
