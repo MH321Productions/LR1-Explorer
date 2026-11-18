@@ -1,5 +1,4 @@
 #include <LR1-Explorer/ui/mainwindow.hpp>
-#include <LR1-Explorer/model/TreeModel.hpp>
 
 #include <iostream>
 
@@ -25,57 +24,8 @@ namespace LR1_Explorer {
 
         splitterMain = new QSplitter;
 
-        //Test
-        const QString testData = R"(
-Getting Started				How to familiarize yourself with Qt Widgets Designer
-    Launching Designer			Running the Qt Widgets Designer application
-    The User Interface			How to interact with Qt Widgets Designer
-
-Designing a Component			Creating a GUI for your application
-    Creating a Dialog			How to create a dialog
-    Composing the Dialog		Putting widgets into the dialog example
-    Creating a Layout			Arranging widgets on a form
-    Signal and Slot Connections		Making widget communicate with each other
-
-Using a Component in Your Application	Generating code from forms
-    The Direct Approach			Using a form without any adjustments
-    The Single Inheritance Approach	Subclassing a form's base class
-    The Multiple Inheritance Approach	Subclassing the form itself
-    Automatic Connections		Connecting widgets using a naming scheme
-        A Dialog Without Auto-Connect	How to connect widgets without a naming scheme
-        A Dialog With Auto-Connect	Using automatic connections
-
-Form Editing Mode			How to edit a form in Qt Widgets Designer
-    Managing Forms			Loading and saving forms
-    Editing a Form			Basic editing techniques
-    The Property Editor			Changing widget properties
-    The Object Inspector		Examining the hierarchy of objects on a form
-    Layouts				Objects that arrange widgets on a form
-        Applying and Breaking Layouts	Managing widgets in layouts
-        Horizontal and Vertical Layouts	Standard row and column layouts
-        The Grid Layout			Arranging widgets in a matrix
-    Previewing Forms			Checking that the design works
-
-Using Containers			How to group widgets together
-    General Features			Common container features
-    Frames				QFrame
-    Group Boxes				QGroupBox
-    Stacked Widgets			QStackedWidget
-    Tab Widgets				QTabWidget
-    Toolbox Widgets			QToolBox
-
-Connection Editing Mode			Connecting widgets together with signals and slots
-    Connecting Objects			Making connections in Qt Widgets Designer
-    Editing Connections			Changing existing connections
-)";
-        char c = '\t';
-
-        fileModel = new JamFileSystemModel();
-        fileModel->setRootPath(rootDir);
-        auto* model = new TreeModel(testData);
+        fileModel = new JamFileSystemModel(rootDir);
         treeView = new QTreeView(splitterMain);
-        treeView->setModel(model);
-
         treeView->setModel(fileModel);
         connect(treeView, &QTreeView::clicked, this, &MainWindow::onSelectFile);
 
@@ -115,6 +65,7 @@ Connection Editing Mode			Connecting widgets together with signals and slots
     }
 
     void MainWindow::onSelectFile(const QModelIndex& index) {
-        std::cout << index.column() << ", " << index.row() << std::endl;
+        std::optional<LR1::FileWrapper> data = fileModel->fileData(index);
+        if (data) std::cout << data.value().filename() << ", real file: " << std::boolalpha << data.value().isRealFile() << std::endl;
     }
 }
