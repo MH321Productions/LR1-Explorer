@@ -1,5 +1,7 @@
 #include <algorithm>
 
+#include <QFileInfo>
+
 #include <LR1-Explorer/model/JamFileSystemModel.hpp>
 
 using namespace std;
@@ -57,6 +59,13 @@ namespace LR1_Explorer {
         ".WDB",
     };
 
+    JamFileSystemModel::JamFileSystemModel(QObject *parent) : QAbstractItemModel(parent) {}
+    JamFileSystemModel::~JamFileSystemModel() {
+        indices.clear();
+        entries.clear();
+        loadedJams.clear();
+    }
+
     Qt::ItemFlags JamFileSystemModel::flags(const QModelIndex &index) const {
         if (index.isValid()) return QAbstractItemModel::flags(index);
         return Qt::NoItemFlags;
@@ -64,6 +73,7 @@ namespace LR1_Explorer {
 
     bool JamFileSystemModel::hasChildren(const QModelIndex& parent) const {
         const auto* entry = static_cast<const JamFSEntry*>(parent.constInternalPointer());
+        if (!entry) return false;
         if (entry->isReal()) {
             if (entry->isFile()) return false;
             directory_iterator it(entry->p);
@@ -87,7 +97,10 @@ namespace LR1_Explorer {
     }
 
     QModelIndex JamFileSystemModel::index(const int row, const int column, const QModelIndex& parent) const {
-        if (column < 0 || column > 1 || row < 0) return {};
+        if (!hasIndex(row, column, parent))
+            return {};
+
+        //if (column < 0 || column > 1 || row < 0) return {};
 
         const auto* parentEntry = static_cast<const JamFSEntry*>(parent.constInternalPointer());
         if (!indices.contains(parentEntry->p)) return {};
@@ -116,8 +129,14 @@ namespace LR1_Explorer {
         return parent.column() > 0 ? 0 : 2;
     }
 
-    QVariant JamFileSystemModel::data(const QModelIndex& index, int role) const {
-        return "Test"; //TODO: Implement
+    QVariant JamFileSystemModel::data(const QModelIndex& index, const int role) const {
+        if (!index.isValid() || role != Qt::DisplayRole)
+            return {};
+
+        const auto *item = static_cast<const JamFSEntry*>(index.internalPointer());
+        if (index.column() == 0) return QFileInfo(item->p).fileName();
+        //return item->data(index.column());
+        return {}; //TODO: Implement
     }
 
     QModelIndex JamFileSystemModel::setRootPath(const path& path) {
@@ -132,10 +151,11 @@ namespace LR1_Explorer {
         return createIndex(0, 0, &(entries.at(path)));
     }
 
-    QVariant JamFileSystemModel::headerData(const int section, Qt::Orientation, int) const {
+    QVariant JamFileSystemModel::headerData(const int section, const Qt::Orientation orientation, const int role) const {
+        if (orientation != Qt::Horizontal || role != Qt::DisplayRole) return {};
         if (section == 0) return "Name";
         if (section == 1) return "Type";
-        return "";
+        return {};
     }
 
     void JamFileSystemModel::loadDir(const path& dir) {

@@ -19,8 +19,8 @@ namespace LR1_Explorer {
         public:
             Q_DISABLE_COPY_MOVE(JamFileSystemModel)
 
-            explicit JamFileSystemModel(QObject* parent = nullptr) : QAbstractItemModel(parent) {}
-            ~JamFileSystemModel() override = default;
+            explicit JamFileSystemModel(QObject* parent = nullptr);
+            ~JamFileSystemModel() override;
 
             [[nodiscard]] Qt::ItemFlags flags(const QModelIndex &index) const override;
             [[nodiscard]] bool hasChildren(const QModelIndex &parent) const override;
