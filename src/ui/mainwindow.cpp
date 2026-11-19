@@ -14,6 +14,7 @@
 #include <LR1-Explorer/ui/mainwindow.hpp>
 #include <LR1-Explorer/ui/viewer/imageviewer.hpp>
 #include <LR1-Explorer/ui/viewer/unsupportedviewer.hpp>
+#include <LR1-Explorer/ui/viewer/audioviewer.hpp>
 
 using namespace std;
 using namespace std::filesystem;
@@ -37,7 +38,7 @@ namespace LR1_Explorer {
         viewers = {
             {
                 make_unique<ImageViewer>(),
-                make_unique<UnsupportedViewer>(),
+                make_unique<AudioViewer>(),
                 make_unique<UnsupportedViewer>(),
                 make_unique<UnsupportedViewer>(),
                 make_unique<UnsupportedViewer>(),
@@ -89,7 +90,7 @@ namespace LR1_Explorer {
         }
     }
 
-    void MainWindow::onSelectFile(const QModelIndex& index) {
+    void MainWindow::onSelectFile(const QModelIndex& index) const {
         std::optional<LR1::FileWrapper> data = fileModel->fileData(index);
         if (data) {
             currentViewer()->unload();

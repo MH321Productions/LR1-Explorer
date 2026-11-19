@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 # Dependencies
 include(FetchContent)
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Multimedia)
 
 FetchContent_Declare(
         LR1
@@ -30,8 +30,10 @@ qt_add_executable(LR1-Explorer
         include/LR1-Explorer/ui/viewer/unsupportedviewer.hpp
         include/LR1-Explorer/ui/viewer/imageviewer.hpp
         src/ui/viewer/imageviewer.cpp
+        include/LR1-Explorer/ui/viewer/audioviewer.hpp
+        src/ui/viewer/audioviewer.cpp
 )
-target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets LR1)
+target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Multimedia LR1)
 
 set_target_properties(LR1-Explorer PROPERTIES
         WIN32_EXECUTABLE ON

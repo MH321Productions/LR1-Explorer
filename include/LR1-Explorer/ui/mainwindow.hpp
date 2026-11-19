@@ -34,7 +34,7 @@ namespace LR1_Explorer {
             QString rootDir;
 
             void onSave();
-            void onSelectFile(const QModelIndex& index);
+            void onSelectFile(const QModelIndex& index) const;
 
             [[nodiscard]] std::optional<LR1::FileWrapper> currentFile() const;
             [[nodiscard]] const std::unique_ptr<LR1Viewer>& currentViewer() const;
