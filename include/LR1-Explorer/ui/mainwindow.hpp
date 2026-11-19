@@ -2,10 +2,13 @@
 #define LR1_EXPLORER_MAINWINDOW_HPP
 
 #include <filesystem>
+#include <array>
 
 #include <QMainWindow>
+#include <QString>
 
 #include <LR1-Explorer/model/JamFileSystemModel.hpp>
+#include <LR1-Explorer/ui/viewer/viewer.hpp>
 
 class QTreeView;
 class QSplitter;
@@ -23,12 +26,18 @@ namespace LR1_Explorer {
 
             QSplitter* splitterMain;
             QStackedWidget* stackedViewer;
+            std::array<std::unique_ptr<LR1Viewer>, static_cast<uint8_t>(LR1::ResourceType::Unsupported) + 1> viewers;
 
             QTreeView* treeView;
             JamFileSystemModel* fileModel;
 
-            void onOpen();
+            QString rootDir;
+
+            void onSave();
             void onSelectFile(const QModelIndex& index);
+
+            [[nodiscard]] std::optional<LR1::FileWrapper> currentFile() const;
+            [[nodiscard]] const std::unique_ptr<LR1Viewer>& currentViewer() const;
     };
 }
 
