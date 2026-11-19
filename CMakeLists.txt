@@ -21,9 +21,15 @@ include_directories(include)
 qt_add_executable(LR1-Explorer
         src/main.cpp
         src/ui/mainwindow.cpp
+
         include/LR1-Explorer/model/JamFileSystemModel.hpp
         src/model/JamFileSystemModel.cpp
         src/model/JamFileSystemEntry.cpp
+
+        include/LR1-Explorer/ui/viewer/viewer.hpp
+        include/LR1-Explorer/ui/viewer/unsupportedviewer.hpp
+        include/LR1-Explorer/ui/viewer/imageviewer.hpp
+        src/ui/viewer/imageviewer.cpp
 )
 target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets LR1)
 
@@ -32,7 +38,7 @@ set_target_properties(LR1-Explorer PROPERTIES
         MACOSX_BUNDLE ON
 )
 
-install(TARGETS LR1-Explorer
+install(TARGETS LR1-Explorer LR1
         BUNDLE DESTINATION .
         RUNTIME DESTINATION bin
 )
