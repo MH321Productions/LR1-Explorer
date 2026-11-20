@@ -12,7 +12,7 @@ namespace LR1_Explorer {
         public:
             Q_DISABLE_COPY_MOVE(UnsupportedViewer)
 
-            explicit UnsupportedViewer(QWidget* parent = nullptr) : QLabel(QStringLiteral("The selected file is not (yet) supported"), parent) {
+            explicit UnsupportedViewer(QWidget* parent = nullptr) : LR1Viewer(LR1::ResourceType::Unsupported, {}), QLabel(QStringLiteral("The selected file is not (yet) supported"), parent) {
                 setAlignment(Qt::AlignCenter);
             }
             ~UnsupportedViewer() override = default;
@@ -22,7 +22,6 @@ namespace LR1_Explorer {
             bool canSave(const LR1::FileWrapper &file) override {return false;}
             void unload() override {}
             QWidget* getWidget() override {return this;}
-            QString getSaveFilter() override {return {};}
     };
 }
 

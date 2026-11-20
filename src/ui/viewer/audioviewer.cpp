@@ -8,26 +8,24 @@ using namespace std;
 using namespace std::filesystem;
 
 namespace LR1_Explorer {
-    const QString AudioViewer::saveFilter = QStringLiteral("WAV files (*.wav)");
     const QString AudioViewer::emptyDuration = QStringLiteral("00:00");
     const QIcon AudioViewer::iconPlay = QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackStart);
     const QIcon AudioViewer::iconPause = QIcon::fromTheme(QIcon::ThemeIcon::MediaPlaybackPause);
 
-    AudioViewer::AudioViewer(QWidget* parent) : QWidget(parent), buffer(make_unique<QBuffer>()), player(nullptr) {
+    AudioViewer::AudioViewer(QWidget* parent) : LR1Viewer(LR1::ResourceType::Audio, QStringLiteral("WAV files (*.wav)")), QWidget(parent), buffer(make_unique<QBuffer>()), player(nullptr) {
         buffer->open(QIODeviceBase::ReadOnly);
 
         lblProgressed = new QLabel(emptyDuration);
         lblTotal = new QLabel(emptyDuration);
-        slider = new QSlider(Qt::Horizontal);
-        slider->setTracking(true);
-        connect(slider, &QSlider::valueChanged, this, &AudioViewer::onSeek);
+        progressBar = new QProgressBar;
+        progressBar->setTextVisible(false);
 
         btnPlay = new QPushButton(iconPlay, QString());
         connect(btnPlay, &QPushButton::clicked, this, &AudioViewer::onPlayPause);
 
         auto* progressLayout = new QHBoxLayout;
         progressLayout->addWidget(lblProgressed);
-        progressLayout->addWidget(slider);
+        progressLayout->addWidget(progressBar);
         progressLayout->addWidget(lblTotal);
 
         auto* mainLayout = new QVBoxLayout;
@@ -52,8 +50,8 @@ namespace LR1_Explorer {
         format.setSampleFormat(QAudioFormat::Int16);
 
         lblTotal->setText(formatFrameDuration(static_cast<qint32>(pcm->data.size())));
-        slider->setMaximum(static_cast<qint32>(format.durationForFrames(static_cast<qint32>(pcm->data.size()))));
-        slider->setValue(0);
+        progressBar->setMaximum(static_cast<qint32>(format.durationForFrames(static_cast<qint32>(pcm->data.size()))));
+        progressBar->setValue(0);
 
         if (!QMediaDevices::defaultAudioOutput().isFormatSupported(format)) {
             qWarning() << "The default audio output device \"" << QMediaDevices::defaultAudioOutput().description() << "\" doesn't support the required audio format" << format;
@@ -73,10 +71,8 @@ namespace LR1_Explorer {
     }
 
     bool AudioViewer::save(const LR1::FileWrapper& file, const path& outFile) {
-        return false;
+        return decoder.convertWrapper(file, outFile);
     }
-
-    bool AudioViewer::canSave(const LR1::FileWrapper& file) {return file.type == LR1::ResourceType::Audio;}
 
     void AudioViewer::unload() {
         player->stop();
@@ -116,14 +112,11 @@ namespace LR1_Explorer {
         }
     }
 
-    void AudioViewer::onSeek(int frame) const {
-
-    }
-
     void AudioViewer::onTimer() const {
-        const qint64 currentMillis = player->processedUSecs();
-        slider->setValue(static_cast<qint32>(currentMillis));
-        lblProgressed->setText(formatMicrosDuration(static_cast<qint32>(currentMillis)));
+        const qint64 currentFrame = buffer->pos() / 2;
+        const qint64 currentMicros = player->format().durationForFrames(static_cast<qint32>(currentFrame));
+        progressBar->setValue(static_cast<qint32>(currentMicros));
+        lblProgressed->setText(formatMicrosDuration(static_cast<qint32>(currentMicros)));
     }
 
     QString AudioViewer::formatFrameDuration(const qint32 &frameNumber) const {

@@ -19,10 +19,8 @@ namespace LR1_Explorer {
 
             bool load(const LR1::FileWrapper &file) override;
             bool save(const LR1::FileWrapper &file, const std::filesystem::path &outFile) override;
-            bool canSave(const LR1::FileWrapper &file) override;
             void unload() override;
             QWidget *getWidget() override;
-            QString getSaveFilter() override;
 
         private:
             LR1::BmpDecoder decoder;

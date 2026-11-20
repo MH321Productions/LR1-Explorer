@@ -7,7 +7,7 @@ using namespace std;
 using namespace std::filesystem;
 
 namespace LR1_Explorer {
-    ImageViewer::ImageViewer(QWidget* parent) : QLabel(parent) {
+    ImageViewer::ImageViewer(QWidget* parent) : LR1Viewer(LR1::ResourceType::Image, QStringLiteral("PNG Images (*.png)")), QLabel(parent) {
         setAlignment(Qt::AlignCenter);
     }
 
@@ -22,12 +22,8 @@ namespace LR1_Explorer {
     }
 
     bool ImageViewer::save(const LR1::FileWrapper& file, const path& outFile) {
-        const optional<LR1::Bmp> bmp = decoder.decodeWrapper(file);
-        if (bmp) return decoder.save(outFile, bmp.value());
-        return false;
+        return decoder.convertWrapper(file, outFile);
     }
-
-    bool ImageViewer::canSave(const LR1::FileWrapper& file) {return file.type == LR1::ResourceType::Image;}
 
     void ImageViewer::unload() {
         pixmap().detach();
@@ -37,6 +33,4 @@ namespace LR1_Explorer {
     QWidget* ImageViewer::getWidget() {
         return this;
     }
-
-    QString ImageViewer::getSaveFilter() {return tr("PNG Images (*.png)");}
 }

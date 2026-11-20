@@ -4,7 +4,7 @@
 #include <QAudioSink>
 #include <QBuffer>
 #include <QLabel>
-#include <QSlider>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QIcon>
 #include <QTimer>
@@ -25,13 +25,10 @@ namespace LR1_Explorer {
 
             bool load(const LR1::FileWrapper& file) override;
             bool save(const LR1::FileWrapper& file, const std::filesystem::path& outFile) override;
-            bool canSave(const LR1::FileWrapper& file) override;
             void unload() override;
-            QString getSaveFilter() override {return saveFilter;}
             QWidget* getWidget() override {return this;}
 
         private:
-            static const QString saveFilter;
             static const QString emptyDuration;
             static const QIcon iconPlay;
             static const QIcon iconPause;
@@ -42,13 +39,12 @@ namespace LR1_Explorer {
 
             QLabel* lblProgressed;
             QLabel* lblTotal;
-            QSlider* slider;
+            QProgressBar* progressBar;
             QPushButton* btnPlay;
             QTimer* timer;
 
             void onPlayPause() const;
             void onStateChanged(QAudio::State state) const;
-            void onSeek(int frame) const;
             void onTimer() const;
 
             [[nodiscard]] QString formatFrameDuration(const qint32& frameNumber) const;
