@@ -32,6 +32,8 @@ qt_add_executable(LR1-Explorer
         src/ui/viewer/imageviewer.cpp
         include/LR1-Explorer/ui/viewer/audioviewer.hpp
         src/ui/viewer/audioviewer.cpp
+        include/LR1-Explorer/ui/viewer/textviewer.hpp
+        src/ui/viewer/textviewer.cpp
 )
 target_link_libraries(LR1-Explorer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Multimedia LR1)
 

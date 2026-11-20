@@ -15,6 +15,7 @@
 #include <LR1-Explorer/ui/viewer/imageviewer.hpp>
 #include <LR1-Explorer/ui/viewer/unsupportedviewer.hpp>
 #include <LR1-Explorer/ui/viewer/audioviewer.hpp>
+#include <LR1-Explorer/ui/viewer/textviewer.hpp>
 
 using namespace std;
 using namespace std::filesystem;
@@ -39,10 +40,13 @@ namespace LR1_Explorer {
             {
                 make_unique<ImageViewer>(),
                 make_unique<AudioViewer>(),
-                make_unique<UnsupportedViewer>(),
-                make_unique<UnsupportedViewer>(),
-                make_unique<UnsupportedViewer>(),
-                make_unique<UnsupportedViewer>(),
+                make_unique<TextViewer>(),
+                make_unique<UnsupportedViewer>(), //Model
+                make_unique<UnsupportedViewer>(), //Mesh
+                make_unique<UnsupportedViewer>(), //Material
+
+                //...
+
                 make_unique<UnsupportedViewer>(),
             }
         };
