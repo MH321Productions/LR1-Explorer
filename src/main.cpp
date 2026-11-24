@@ -5,6 +5,9 @@
 
 #include <LR1-Explorer/ui/mainwindow.hpp>
 
+#include <QtQml/qqmlextensionplugin.h>
+Q_IMPORT_QML_PLUGIN(LR1ExplorerPlugin)
+
 using namespace std::filesystem;
 
 static path getRootDir();

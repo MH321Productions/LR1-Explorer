@@ -53,6 +53,7 @@ namespace LR1_Explorer {
             [[nodiscard]] int rowCount(const QModelIndex &parent) const override;
             [[nodiscard]] int columnCount(const QModelIndex &parent) const override;
             [[nodiscard]] std::optional<LR1::FileWrapper> fileData(const QModelIndex& index) const;
+            [[nodiscard]] std::optional<LR1::FileWrapper> fileData(const std::filesystem::path& path) const;
 
         private:
             static bool cmpDirEntry(const std::filesystem::directory_entry& e1, const std::filesystem::directory_entry& e2);

@@ -16,6 +16,7 @@
 #include <LR1-Explorer/ui/viewer/unsupportedviewer.hpp>
 #include <LR1-Explorer/ui/viewer/audioviewer.hpp>
 #include <LR1-Explorer/ui/viewer/textviewer.hpp>
+#include <LR1-Explorer/ui/viewer/meshviewer.hpp>
 
 using namespace std;
 using namespace std::filesystem;
@@ -42,7 +43,7 @@ namespace LR1_Explorer {
                 make_unique<AudioViewer>(),
                 make_unique<TextViewer>(),
                 make_unique<UnsupportedViewer>(), //Model
-                make_unique<UnsupportedViewer>(), //Mesh
+                make_unique<MeshViewer>(), //Mesh
                 make_unique<UnsupportedViewer>(), //Material
 
                 //...
@@ -74,6 +75,17 @@ namespace LR1_Explorer {
         menuFile->addAction(miFileQuit);
 
         statusBar()->showMessage(this->rootDir);
+    }
+
+    MainWindow* MainWindow::getInstance() {
+        for (QWindow* w: QApplication::topLevelWindows())
+            if (auto* mainWin = qobject_cast<MainWindow*>(w))
+                return mainWin;
+        return nullptr;
+    }
+
+    std::optional<LR1::FileWrapper> MainWindow::getFile(const path& filePath) const {
+        return fileModel ? fileModel->fileData(filePath) : nullopt;
     }
 
     void MainWindow::onSave() {

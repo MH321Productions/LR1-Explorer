@@ -1,4 +1,3 @@
-#include <qicon.h>
 #include <LR1-Explorer/model/JamFileSystemModel.hpp>
 
 using namespace std;
@@ -44,7 +43,11 @@ namespace LR1_Explorer {
 
     std::optional<LR1::FileWrapper> JamFileSystemModel::fileData(const QModelIndex& index) const {
         const auto* entry = getEntry(index);
-        return entryData.contains(entry->getPath()) ? entryData.at(entry->getPath()) : std::optional<LR1::FileWrapper>(nullopt);
+        return fileData(entry->getPath());
+    }
+
+    std::optional<LR1::FileWrapper> JamFileSystemModel::fileData(const path& path) const {
+        return entryData.contains(path) ? entryData.at(path) : std::optional<LR1::FileWrapper>(nullopt);
     }
 
     QVariant JamFileSystemModel::data(const QModelIndex& index, const int role) const {
