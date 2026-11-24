@@ -9,7 +9,7 @@
 #include <QIcon>
 #include <QTimer>
 
-#include <LR1-Explorer/ui/viewer/viewer.hpp>
+#include <LR1-Explorer/ui/viewer.hpp>
 
 #include <LR1/formats/audio.hpp>
 

@@ -3,7 +3,7 @@
 
 #include <QLabel>
 
-#include <LR1-Explorer/ui/viewer/viewer.hpp>
+#include <LR1-Explorer/ui/viewer.hpp>
 
 namespace LR1_Explorer {
     class UnsupportedViewer : public QLabel, public virtual LR1Viewer {

@@ -3,7 +3,7 @@
 
 #include <QListWidget>
 
-#include <LR1-Explorer/ui/viewer/viewer.hpp>
+#include <LR1-Explorer/ui/viewer.hpp>
 
 #include <LR1/formats/srf.hpp>
 

@@ -5,7 +5,7 @@
 
 #include <LR1/formats/bmp.hpp>
 
-#include <LR1-Explorer/ui/viewer/viewer.hpp>
+#include <LR1-Explorer/ui/viewer.hpp>
 
 namespace LR1_Explorer {
     class ImageViewer : public QLabel, public virtual LR1Viewer {

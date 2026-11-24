@@ -13,9 +13,10 @@ namespace LR1_Explorer {
 
             virtual bool load(const LR1::FileWrapper& file) = 0;
             virtual bool save(const LR1::FileWrapper& file, const std::filesystem::path& outFile) = 0;
-            virtual bool canSave(const LR1::FileWrapper& file) {return file.type == supportedType;}
             virtual void unload() = 0;
             virtual QWidget* getWidget() = 0;
+
+            virtual bool canSave(const LR1::FileWrapper& file) {return file.type == supportedType;}
             virtual QString getSaveFilter() {return saveFilter;}
 
         protected:
